@@ -56,12 +56,12 @@ export default function Navbar() {
             </div>
             <button
               className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md cursor-pointer"
-              // onClick={async () => {
-              //   await axios.post(`${BASE_URL}/api/user/logout`, {
-              //     withCredentials: true,
-              //   });
-              //   navigate("/login");
-              // }}
+              onClick={async () => {
+                await axios.post(`${BASE_URL}/api/user/logout`, {
+                  withCredentials: true,
+                });
+                navigate("/login");
+              }}
             >
               Log Out
             </button>

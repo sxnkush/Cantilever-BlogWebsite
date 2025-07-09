@@ -12,7 +12,7 @@ export default function BlogDetails() {
   useEffect(() => {
     const fetchBlogDetails = async () => {
       try {
-        const res = await axios.get(`/api/blog/${id}`, { withCredentials: true }); //jab is get request to return karna to uske saath requestBy user ki bhi id dena object ki form mai
+        const res = await axios.get(`/api/blog/blogDetail/${id}`, { withCredentials: true }); //jab is get request to return karna to uske saath requestBy user ki bhi id dena object ki form mai
         if (res.data.message == "not found") navigate("/login");
         else setBlog(res.data);
 
@@ -30,7 +30,7 @@ export default function BlogDetails() {
     <div className="max-w-3xl mx-auto p-4">
       <h1 className="text-3xl font-bold mb-2">{blog.title}</h1>
       <p className="text-gray-500">
-        By {blog.author} on {blog.date}
+        By {blog.author} on {blog.publishedDate}
       </p>
       <img src={blog.image} className="w-full h-64 object-cover my-4" />
       <div
@@ -38,7 +38,7 @@ export default function BlogDetails() {
         dangerouslySetInnerHTML={{ __html: blog.content }}
       />
       <button onClick={() => {
-        axios.patch(`api/blog/liked/${id}`, {withCredentials: true});
+        axios.patch(`api/blog/liked/${id}`, {}, {withCredentials: true}); //agr already liked hai toh remove from likedBy, nahi toh append in likedBy
         setLiked((prev) => !prev);
       }}>
         <FaHeart

@@ -41,7 +41,7 @@ export default function Login() {
           setPass("");
           return;
         }
-        if (response.data.message === "success") {
+        if (response.data.message === "Log In success") {
           navigate(`/`);
         }
         setEmail("");

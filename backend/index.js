@@ -1,14 +1,20 @@
 const express = require("express");
 const app = express();
+const dotenv = require("dotenv")
+dotenv.config()
 
-const cors = require("cores");
-const PORT = 8001;
+const cors = require("cors");
+const PORT = process.env.PORT || 8001;
 const { connectMongoose } = require("./connection");
+
+const blogRoute = require("./routes/blog");
+const userRoute = require("./routes/user");
+const {restrictToLogInUserOnly, checkAuth} = require("./middleware/auth");
 
 const cookieParser = require("cookie-parser");
 
 connectMongoose(
-  "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.4.2"
+  process.env.MONGO_URI
 ).then(() => console.log("Mongoose Connected"));
 
 app.use(
@@ -20,5 +26,8 @@ app.use(
 
 app.use(cookieParser());
 app.use(express.json());
+
+app.use("/api/blog", restrictToLogInUserOnly, blogRoute);
+app.use("/api/user", checkAuth, userRoute)
 
 app.listen(PORT, () => console.log("Server Started"));
