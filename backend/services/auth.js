@@ -3,15 +3,17 @@ const key = "Passthekey0";
 
 function setUser(user) {
   try {
-    return jwt.sign(
+    const token = jwt.sign(
       {
         _id: user._id,
         email: user.email,
       },
       key
     );
+    console.log("Token val", token)
+    return token;
   } catch (err) {
-    return ("Error in token generation", err)
+    console.log("Error in token generation", err)
   }
 }
 

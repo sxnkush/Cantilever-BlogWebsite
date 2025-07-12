@@ -2,11 +2,16 @@ const { getUser } = require("../services/auth");
 
 function restrictToLogInUserOnly(req, res, next) {
   const token = req.cookies?.uid;
-  if (!token) return res.status(401).json({ message: "unauthorized" });
+  if (!token) 
+  {
+    console.log("No token")
+    return res.status(401).json({ message: "unauthorized" });
+  }
 
   try {
     const user = getUser(token);
     if (!user) {
+      console.log("No such User")
       return res.status(401).json({ message: "unauthorized" });
     }
 

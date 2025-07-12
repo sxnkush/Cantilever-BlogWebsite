@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const { setUser } = require("../services/auth");
+const dotenv  = require("dotenv")
+dotenv.config()
 
 async function handleLogin(req, res) {
   //to check whether user is already logged in or not
@@ -14,9 +16,9 @@ async function handleLogin(req, res) {
   const token = setUser(user);
   res.cookie("uid", token, {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "Lax",
-    maxAge: (60 * 60 * 1000) / 6,
+    maxAge: 24 * (60 * 60 * 1000) / 6,
   });
 
   console.log("User Logged In ", user);
@@ -47,9 +49,11 @@ async function handleLogOut(req, res) {
 
 async function handleFetchUser(req, res)
 {   
-    const user = req.user
+    //agr user logged in nahi hai then this must return 401 i.e. user is not logged since is par hum checkAuth middleware use kar rahe hai
+    if(!req.user) return res.status(401).json({message:"unauthorized"})
+    const user = await User.findById(req.user._id)
 
-    //agr user logged in nahi hai toh, mtlb agr is route par direct request aata hai to handle that=>
+    //agr user logged in nahi hai toh, mtlb agr is route par direct request aata hai without user logIn to handle that=>
     if(!user) return res.status(401).json({message:"unauthorized"})
 
     return res.status(200).json(user)

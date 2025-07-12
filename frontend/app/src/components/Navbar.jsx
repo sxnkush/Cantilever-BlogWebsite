@@ -1,10 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { FaChevronDown, FaChevronRight, FaEnvelope } from "react-icons/fa";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 export default function Navbar() {
+  const BASE_URL = import.meta.env.VITE_API_URL
   const [showLogout, setShowLogout] = useState(false);
   const [arrowDown, setArrowDown] = useState(false);
+  const navigate = useNavigate()
+  const [user, setUser] = useState(null)
+  const fetch = useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/user`, {
+          withCredentials: true,
+        });
+        setUser(res.data)
+      } catch (err) {
+        if (
+          err.response?.status == 401 ||
+          err.response?.data.message === "unauthorized"
+        ) {
+          navigate("/login");
+        } else console.log("Error in frontend user fetch", err);
+      } 
+    };
+
+    fetchUser();
+  }, []);
   return (
     <div className="flex justify-between px-16 py-2 shadow-xl w-screen">
       <div className="space-x-8 mt-2.5 ml-24">
@@ -40,7 +63,7 @@ export default function Navbar() {
             className="w-12 h-12 rounded-full border-2 border-[#474d4e]"
           />
           <div className="flex flex-col text-left truncate">
-            <p className="font-medium truncate">{"Loading..."}</p>
+            <p className="font-medium truncate">{user?.name||"Loading..."}</p>
           </div>
           {arrowDown ? (
             <FaChevronDown className="ml-auto" />
@@ -52,12 +75,12 @@ export default function Navbar() {
           <div className="absolute top-16 bg-white shadow-lg p-4 rounded-lg text-sm space-y-4">
             <div className="flex items-center gap-2">
               <FaEnvelope />
-              <span>{"Loading..."}</span>
+              <span>{user?.email||"Loading..."}</span>
             </div>
             <button
               className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md cursor-pointer"
               onClick={async () => {
-                await axios.post(`${BASE_URL}/api/user/logout`, {
+                await axios.post(`${BASE_URL}/api/user/logout`, {}, {       //in post request, third parameter is withCredential, second parameter is data/body
                   withCredentials: true,
                 });
                 navigate("/login");

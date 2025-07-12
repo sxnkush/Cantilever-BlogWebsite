@@ -1,10 +1,15 @@
-const express = require("express")
-const router = express.Router()
+const express = require("express");
+const {
+  handleBlogFetch,
+  handleBlogCreation,
+  handleBlogDetail,
+  handleLiked,
+} = require("../controllers/blog");
+const router = express.Router();
 
-// router.get("/", handleBlogFetch)
-// router.post("/", handleBlogCreation)
-// router.get("/blogDetail/:id", handleBlogDetail)
-// router.patch("/blog/liked/:id", handleLiked)
+router.get("/", handleBlogFetch);
+router.get("/blogDetail/:blogId", handleBlogDetail);
+router.post("/", handleBlogCreation);
+router.post("/liked/:blogId", handleLiked);
 
-
-module.exports = router
+module.exports = router;

@@ -1,20 +1,20 @@
 const mongoose = require("mongoose");
-const blogSchema = mongoose.Schema(
+
+const blogSchema = new mongoose.Schema(
   {
     userId: {
       type: String,
       required: true,
-      unique: false,
-      ref: "User"
     },
-    author:{
-        type: String,
-        required: true,
-        unique: false,
+    author: {
+      type: String,
+      required: true,
+      trim: true,
     },
     title: {
       type: String,
       required: true,
+      trim: true,
     },
     content: {
       type: String,
@@ -26,20 +26,15 @@ const blogSchema = mongoose.Schema(
     },
     publishedDate: {
       type: Date,
-      required: true,
-      default: Date.now(),
+      default: Date.now,
     },
-    likedBy: {
-      type: [String],
-      ref: "User",
-      default: []
-    },
+    likedBy: [],
   },
   {
     timestamps: true,
   }
 );
 
-const Blog = mongoose.model("blogs", blogSchema);
+const Blog = mongoose.model("Blog", blogSchema);
 
 module.exports = Blog;

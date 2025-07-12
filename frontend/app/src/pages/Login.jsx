@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../context/AuthContext.jsx";
 
 
 export default function Login() {
@@ -13,7 +14,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [warning, setWarning] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const {setIsAuthenticated} = useAuth()
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!email || !pass) {
@@ -23,6 +24,7 @@ export default function Login() {
     setLoading(true);
 
     try {
+      //withCredential is mandatory to set cookie and no need to create separate parameter for it if ypu use headers as well, just keep it with that
       setTimeout(async () => {
         const response = await axios.post(
           `${BASE_URL}/api/user/login`,
@@ -31,23 +33,26 @@ export default function Login() {
             headers: {
               "Content-Type": "application/json",
             },
+            withCredentials: true 
           },
-          { withCredentials: true }
         );
 
         if (response.data.message === "not found") {
+          setIsAuthenticated(false)
           setWarning(true);
           setLoading(false);
           setPass("");
           return;
         }
         if (response.data.message === "Log In success") {
+          setIsAuthenticated(true)
           navigate(`/`);
         }
         setEmail("");
         setPass("");
       }, 2000);
     } catch (error) {
+      setIsAuthenticated(false)
       console.error("Login error:", error.response?.data || error.message);
     }
   };
