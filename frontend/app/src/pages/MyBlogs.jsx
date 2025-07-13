@@ -27,6 +27,6 @@ export default function MyBlogs() {
       <EditList blogs={myBlog} />
     </div>
   ) : (
-    <h1>Create Data</h1>
+    <h1>Loading...</h1>
   );
 }

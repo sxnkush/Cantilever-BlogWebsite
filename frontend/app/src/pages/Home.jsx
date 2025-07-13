@@ -28,6 +28,6 @@ export default function Home() {
       <BlogList blogs={connectionsBlog} />
     </div>
   ) : (
-    <h1>Create Data</h1>
+    <h1>Loading...</h1>
   );
 }
