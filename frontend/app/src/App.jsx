@@ -11,6 +11,8 @@ import Signup from "./pages/Signup";
 import BlogDetails from "./pages/BlogDetails";
 import Layout from "./Layout";
 import { useAuth } from "./context/AuthContext.jsx";
+import MyBlogs from "./pages/MyBlogs.jsx";
+import EditBlog from "./pages/EditBlog.jsx";
 
 function App() {
   const {isAuthenticated, setIsAuthenticated} = useAuth()
@@ -25,8 +27,16 @@ function App() {
         element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
       />
       <Route
+        path="/myblog"
+        element={isAuthenticated ? <MyBlogs /> : <Navigate to="/login" />}
+      />
+      <Route
         path="/create"
         element={isAuthenticated ? <Create /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/editblog/:id"
+        element={isAuthenticated ? <EditBlog /> : <Navigate to="/login" />}
       />
       {/* <Route path="/connect" element={<Connect />} /> */}
       <Route

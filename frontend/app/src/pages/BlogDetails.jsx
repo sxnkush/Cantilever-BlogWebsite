@@ -48,7 +48,7 @@ export default function BlogDetails() {
       </button>
       <h1 className="text-3xl font-bold mb-2">{blog.title}</h1>
       <p className="text-gray-500">
-        By {blog.author} on {blog.publishedDate}
+        By {blog.author} on {blog.publishedDate.toString().split('T')[0]}
       </p>
       <img src={blog.image} className="w-full h-64 object-cover my-4" />
       <div
