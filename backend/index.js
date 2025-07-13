@@ -21,7 +21,7 @@ connectMongoose(
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://blogapp-canti.netlify.app/"],
+    origin: ["http://localhost:5173", "https://blogapp-canti.netlify.app"],
     credentials: true,
   })
 );
