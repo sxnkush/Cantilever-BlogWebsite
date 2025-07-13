@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaChevronDown, FaChevronRight, FaEnvelope } from "react-icons/fa";
+import { FaChevronDown, FaChevronRight, FaEnvelope, FaBars, FaTimes } from "react-icons/fa";
 import axios from "axios";
 
 export default function Navbar() {
@@ -8,6 +8,7 @@ export default function Navbar() {
   const [showLogout, setShowLogout] = useState(false);
   const [arrowDown, setArrowDown] = useState(false);
   const [user, setUser] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,15 +29,21 @@ export default function Navbar() {
     fetchUser();
   }, []);
 
+  const navLinks = [
+    { to: "/", name: "Home" },
+    { to: "/create", name: "Create" },
+    { to: "/connect", name: "Connect" },
+    { to: "/myblog", name: "My Blogs" },
+  ];
+
   return (
-    <div className="flex justify-between items-center px-16 py-3 bg-black text-white shadow-lg">
-      <div className="flex space-x-10">
-        {[
-          { to: "/", name: "Home" },
-          { to: "/create", name: "Create" },
-          { to: "/connect", name: "Connect" },
-          { to: "/myblog", name: "My Blogs" },
-        ].map((item, idx) => (
+    <div className="flex justify-between items-center px-6 md:px-16 py-3 bg-black text-white shadow-lg relative">
+      {/* Logo or Brand */}
+      <div className="text-xl font-bold">BlogApp</div>
+
+      {/* Desktop Menu */}
+      <div className="hidden sm:flex space-x-10">
+        {navLinks.map((item, idx) => (
           <NavLink
             key={idx}
             to={item.to}
@@ -51,7 +58,15 @@ export default function Navbar() {
         ))}
       </div>
 
-      <div className="relative">
+      {/* Mobile Menu Icon */}
+      <div className="sm:hidden flex items-center">
+        <button onClick={() => setMenuOpen(!menuOpen)}>
+          {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+        </button>
+      </div>
+
+      {/* User Profile Dropdown */}
+      <div className="hidden sm:block relative">
         <button
           className="flex items-center gap-3 focus:outline-none hover:cursor-pointer"
           onClick={() => {
@@ -71,7 +86,7 @@ export default function Navbar() {
         </button>
 
         {showLogout && (
-          <div className="absolute right-0 top-16 bg-white text-black shadow-xl p-4 rounded-lg text-sm w-56 space-y-4">
+          <div className="absolute right-0 top-16 bg-white text-black shadow-xl p-4 rounded-lg text-sm w-56 space-y-4 z-50">
             <div className="flex items-center gap-2">
               <FaEnvelope className="text-gray-600" />
               <span className="truncate">{user?.email || "Loading..."}</span>
@@ -79,11 +94,7 @@ export default function Navbar() {
             <button
               className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md shadow-sm transition-all hover:cursor-pointer"
               onClick={async () => {
-                await axios.post(
-                  `${BASE_URL}/api/user/logout`,
-                  {},
-                  { withCredentials: true }
-                );
+                await axios.post(`${BASE_URL}/api/user/logout`, {}, { withCredentials: true });
                 navigate("/login");
               }}
             >
@@ -92,6 +103,38 @@ export default function Navbar() {
           </div>
         )}
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {menuOpen && (
+        <div className="sm:hidden absolute top-16 left-0 w-full bg-black flex flex-col items-center space-y-4 py-4 z-40">
+          {navLinks.map((item, idx) => (
+            <NavLink
+              key={idx}
+              to={item.to}
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) =>
+                `font-semibold ${isActive ? "text-white" : "text-gray-400"}`
+              }
+            >
+              {item.name}
+            </NavLink>
+          ))}
+
+          <div className="flex flex-col items-center space-y-2">
+            <p className="text-white font-medium">{user?.name || "Loading..."}</p>
+            <p className="text-sm text-gray-400">{user?.email || "Loading..."}</p>
+            <button
+              className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md shadow-sm transition-all"
+              onClick={async () => {
+                await axios.post(`${BASE_URL}/api/user/logout`, {}, { withCredentials: true });
+                navigate("/login");
+              }}
+            >
+              Log Out
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -20,8 +20,9 @@ export function AuthProvider({ children }) {
           err.response?.status == 401 ||
           err.response?.data.message === "unauthorized"
         ) {
-            setIsAuthenticated(false)
-            navigate("/login")
+          setIsAuthenticated(false);
+          if(window.location.pathname !== "/signup")    //kyuki jab hum signup ke route par ja rahe tab yaha par user not authenticated tha ya res error aata isliye wo baar baar /login trigger kar raha tha so we used this condition
+          navigate("/login");
         } else console.log("Error in frontend user fetch", err);
       }
     };

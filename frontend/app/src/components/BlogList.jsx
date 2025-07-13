@@ -2,7 +2,7 @@ import BlogCard from "./BlogCard";
 
 export default function BlogList({ blogs }) {
   return (
-    <div className="grid md:grid-cols-3 gap-6 py-10 px-24 mb-16 mt-10">
+    <div className="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 px-10 py-5 sm:py-10 sm:px-24 mb-16 mt-10">
       {blogs.map((blog) => (
         <BlogCard
           key={blog._id}

@@ -11,7 +11,6 @@ export default function BlogDetails() {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const navigate = useNavigate();
-
   useEffect(() => {
     const fetchBlogDetails = async () => {
       try {
@@ -43,12 +42,15 @@ export default function BlogDetails() {
 
   return blog ? (
     <div className="relative max-w-3xl mx-auto p-4 mb-16 mt-5">
-      <button className="absolute top-0 -left-10 hover:cursor-pointer" onClick={() => navigate("/")}>
+      <button
+        className="absolute top-0 -left-10 hover:cursor-pointer"
+        onClick={() => navigate("/")}
+      >
         <FaArrowLeft />
       </button>
       <h1 className="text-3xl font-bold mb-2">{blog.title}</h1>
       <p className="text-gray-500">
-        By {blog.author} on {blog.publishedDate.toString().split('T')[0]}
+        By {blog.author} on {blog.publishedDate.toString().split("T")[0]}
       </p>
       <img src={blog.image} className="w-full h-64 object-cover my-4" />
       <div
@@ -56,6 +58,7 @@ export default function BlogDetails() {
         dangerouslySetInnerHTML={{ __html: blog.content }}
       />
       <button
+        className="hover:cursor-pointer"
         onClick={() => {
           axios.post(
             `${BASE_URL}/api/blog/liked/${id}`,
@@ -63,17 +66,20 @@ export default function BlogDetails() {
             { withCredentials: true }
           ); //agr already liked hai toh remove from likedBy, nahi toh append in likedBy
           setLiked((prev) => !prev);
-          setLikeCount((prev) => prev + 1);
+          setLikeCount((prev) => {
+            if (liked) return prev - 1;
+            else return prev + 1;
+          });
         }}
       >
         <FaHeart
-          className={`${liked ? "text-red-600" : "text-white"} border-black`}
+          className={`${liked ? "text-red-600" : "text-white"} border-black text-xl`}
           style={{
             stroke: "black",
             strokeWidth: "50px",
           }}
         />
-        {likeCount}
+        {likeCount} Like
       </button>
     </div>
   ) : (

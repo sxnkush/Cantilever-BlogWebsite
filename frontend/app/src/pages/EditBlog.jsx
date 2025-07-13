@@ -58,7 +58,7 @@ export default function EditBlog() {
 
   return (
     <div>
-      <div className="mt-10 mb-16 px-16 py-5">
+      <div className="mt-10 mb-16 sm:px-16 sm:py-5">
         <h1 className="text-3xl font-bold text-center">Edit Your Blog</h1>
         <form
           onSubmit={(e) => handleSubmit(e)}

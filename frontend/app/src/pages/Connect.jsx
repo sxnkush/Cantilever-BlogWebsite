@@ -1,4 +1,8 @@
 export default function Connect()
 {
-    return(<>Connect</>)
+    return(
+        <div className="flex justify-center items-center">
+            Coming Soon...
+        </div>
+    )
 }

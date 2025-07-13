@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 
-
 export default function Signup() {
   const BASE_URL = import.meta.env.VITE_API_URL;
   const [name, setName] = useState("");
@@ -25,13 +24,12 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      const response = await axios.post(
+      await axios.post(
         `${BASE_URL}/api/user/signup`,
         { name, email, password: pass },
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       );
 
-      console.log("Signup success:", response.data);
       setName("");
       setEmail("");
       setPass("");
@@ -44,113 +42,73 @@ export default function Signup() {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-purple-400 to-purple-600">
+    <div className="min-h-screen p-5 flex items-center justify-center bg-black relative overflow-hidden">
       <img
-        src="/signup.svg"
-        alt="Signup Background"
-        className="absolute sm:top-0 -top-10 inset-0 w-full h-full object-cover opacity-30 z-0"
+        src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80"
+        alt="Background"
+        className="absolute inset-0 w-full h-full object-cover opacity-30"
       />
+      <div className="absolute inset-0 bg-gradient-to-tr from-purple-900 via-black to-purple-900 opacity-80"></div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4 sm:p-8">
-        <div className="text-center mb-8 mt-8">
-          <h1 className="text-3xl sm:text-5xl font-bold">
-            <span className="text-purple-900">Task</span>{" "}
-            <span className="text-white">Manager</span>
-          </h1>
-          <p className="text-violet-100 font-semibold text-sm sm:text-lg mt-1">
-            Start your journey with us today!
-          </p>
-        </div>
+      <div className="w-full max-w-md bg-white rounded-xl shadow-2xl p-8 relative z-10 animate-fadeIn">
+        <h1 className="text-3xl font-bold text-center text-purple-800 mb-2">Create Account</h1>
+        <p className="text-center text-gray-500 mb-6">Join the blog community today</p>
 
-        <div className="bg-white opacity-90 backdrop-blur-md shadow-xl rounded-lg p-8 sm:p-10 w-full max-w-md mt-4">
-          <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-            Sign Up
-          </h2>
-          <form onSubmit={handleSignup} className="space-y-4">
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <FontAwesomeIcon icon={faUser} />
-              </span>
-              <input
-                type="text"
-                placeholder="Enter Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
-              />
-            </div>
+        <form onSubmit={handleSignup} className="space-y-4">
+          <div className="relative">
+            <FontAwesomeIcon icon={faUser} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Your Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out transform hover:scale-105"
+            />
+          </div>
 
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <FontAwesomeIcon icon={faEnvelope} />
-              </span>
-              <input
-                type="email"
-                placeholder="Enter Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
-              />
-            </div>
+          <div className="relative">
+            <FontAwesomeIcon icon={faEnvelope} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <input
+              type="email"
+              placeholder="Your Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out transform hover:scale-105"
+            />
+          </div>
 
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <FontAwesomeIcon icon={faLock} />
-              </span>
-              <input
-                type="password"
-                placeholder="Enter Password"
-                value={pass}
-                onChange={(e) => setPass(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
-              />
-            </div>
+          <div className="relative">
+            <FontAwesomeIcon icon={faLock} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <input
+              type="password"
+              placeholder="Password"
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out transform hover:scale-105"
+            />
+          </div>
 
-            <span className={`text-red-600 ${warning ? "flex" : "hidden"}`}>
-              Fill each field
-            </span>
+          {warning && <p className="text-red-600 text-sm">Please fill all fields.</p>}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full text-white flex items-center justify-center gap-2 font-semibold py-2 px-4 rounded-md transition ${
-                loading
-                  ? "bg-purple-700 cursor-not-allowed"
-                  : "bg-purple-600 hover:bg-purple-700 cursor-pointer"
-              }`}
-            >
-              {loading && (
-                <svg
-                  className="animate-spin h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                  ></path>
-                </svg>
-              )}
-              {loading ? "Signing Up..." : "Sign Up"}
-            </button>
-          </form>
-          <span className="block text-center mt-4">
-            Already a user?{" "}
-            <a href="/login" className="text-blue-400 underline">
-              Log In
-            </a>
-          </span>
-        </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full text-white font-semibold py-3 rounded-lg transition-all duration-300 ease-in-out ${
+              loading
+                ? "bg-purple-700 cursor-not-allowed"
+                : "bg-purple-600 hover:bg-purple-700 transform hover:scale-105"
+            }`}
+          >
+            {loading ? "Creating Account..." : "Sign Up"}
+          </button>
+        </form>
+
+        <p className="text-center text-gray-500 mt-4">
+          Already have an account?{" "}
+          <a href="/login" className="text-purple-600 font-medium underline">
+            Log In
+          </a>
+        </p>
       </div>
     </div>
   );
