@@ -17,7 +17,7 @@ async function handleLogin(req, res) {
   res.cookie("uid", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "Lax",
+    sameSite: process.env.NODE_ENV === "production"? "None":"Lax",
     maxAge: 24 * (60 * 60 * 1000) / 6,
   });
 
@@ -41,8 +41,8 @@ async function handleLogOut(req, res) {
   console.log("Logging out...", req.user);
   res.clearCookie("uid", {
     httpOnly: true,
-    secure: true,
-    sameSite: "Lax",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production"? "None":"Lax",
   });
   return res.json({ message: "Logged Out" });
 }
